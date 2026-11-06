@@ -1,0 +1,53 @@
+name: pilotage
+
+services:
+  backend:
+    build: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////data/pilotage.db}
+      FILES_DIR: ${FILES_DIR:-/data/files}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+    volumes:
+      - pilotage-data:/data
+      - ./backups:/backups  # sauvegardes (`make backup`), à copier hors du serveur
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Capture des emails en développement : http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+    restart: unless-stopped
+
+  # IA locale (facultative) : `make ia-locale`, puis LLM_PROVIDER=local dans .env
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["ia-locale"]
+    environment:
+      OLLAMA_CONTEXT_LENGTH: 8192  # une transcription découpée en blocs de 12 000 caractères y tient
+    volumes:
+      - ollama-models:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  pilotage-data:
+  ollama-models:

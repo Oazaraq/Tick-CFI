@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* Charte Tick’ (DA du 05/11/2026) : Nunito, bleu Klein en majeure, dégradé océan, encadrés surélevés.
+   La gamme « blue » de Tailwind est remplacée par la gamme Klein : boutons, liens et états actifs la suivent. */
+@theme {
+  --font-sans: "Nunito Variable", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --color-blue-50: #eef2ff;
+  --color-blue-100: #dde6ff;
+  --color-blue-200: #bccdff;
+  --color-blue-300: #8ea8fb;
+  --color-blue-400: #5a7cf0;
+  --color-blue-500: #1f4bd8;
+  --color-blue-600: #002fa7; /* bleu Klein */
+  --color-blue-700: #00268c;
+  --color-blue-800: #001e6e;
+  --color-blue-900: #001652;
+  --color-blue-950: #000d33;
+  /* Neutres teintés de bleu : les textes deviennent une encre marine, accordée au bleu Klein */
+  --color-gray-50: #f6f8fc;
+  --color-gray-100: #edf1f8;
+  --color-gray-200: #dde4f0;
+  --color-gray-300: #c6cfe2;
+  --color-gray-400: #93a0bd;
+  --color-gray-500: #64739a;
+  --color-gray-600: #4a5880;
+  --color-gray-700: #33416a;
+  --color-gray-800: #1f2c55;
+  --color-gray-900: #13214a;
+  --color-gray-950: #0a1430;
+  --color-mist: #f2f5fb; /* fond des pages */
+  --color-line: #d4dcec; /* bordure des encadrés */
+  --color-tide: #e4eaf6; /* colonnes du Kanban */
+  --radius-lg: 0.5rem; /* contrôles : boutons, champs, badges */
+  --radius-xl: 0.875rem; /* encadrés */
+  /* Encadrés : bordure de 1,5 px (anneau, sans décaler la mise en page) et ombre bleutée qui les surélève */
+  --shadow-sm: 0 0 0 1.5px #d4dcec, 0 10px 24px -12px rgb(0 26 94 / 0.28), 0 2px 6px -2px rgb(0 26 94 / 0.1);
+}
+
+/* Dégradé océan, réservé à l'identité (en-tête, connexion) */
+@utility bg-ocean {
+  background-image: linear-gradient(118deg, #001a5e 0%, #002fa7 42%, #0062c4 74%, #0096c7 100%);
+}
+
+/* Couleurs de priorité, identiques partout (DFB §4.2) : bg-prio-high, text-prio-critical… */
+@theme {
+  --color-prio-low: #9ca3af;
+  --color-prio-medium: #5a7cf0;
+  --color-prio-high: #f59e0b;
+  --color-prio-critical: #dc2626;
+}
+
+/* Graphiques : rôles de couleur (palette catégorielle validée : ordre fixe, jamais recyclé), à reprendre avec la DA */
+:root {
+  --viz-surface: #ffffff;
+  --viz-grid: #eceae6;
+  --viz-axis: #a8a7a1;
+  --viz-text: #111827;
+  --viz-text-muted: #6b7280;
+  --viz-1: #1f4bd8; /* bleu de la gamme Klein, palette revalidée */
+  --viz-2: #eb6834;
+  --viz-3: #1baf7a;
+  --viz-4: #eda100;
+}
+
+/* Nunito un cran plus épais par défaut (500) : lecture plus confortable, ton plus chaleureux */
+@layer base {
+  body {
+    font-weight: 500;
+  }
+}

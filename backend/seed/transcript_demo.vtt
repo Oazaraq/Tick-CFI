@@ -1,0 +1,53 @@
+WEBVTT
+
+7c1f0d2e-01/12-0
+00:00:02.120 --> 00:00:07.480
+<v Olivier Zimmer>Bonjour à tous, on fait le point sur la migration réseau du site A.</v>
+
+7c1f0d2e-02/14-0
+00:00:08.010 --> 00:00:14.260
+<v Eric Moreau>Les nouveaux commutateurs sont arrivés au dépôt, il manque encore les modules optiques.</v>
+
+7c1f0d2e-03/9-0
+00:00:15.040 --> 00:00:18.300
+<v Olivier Zimmer>Eric, tu commandes le matériel demain ?</v>
+
+7c1f0d2e-04/4-0
+00:00:18.900 --> 00:00:20.100
+<v Eric Moreau>Oui, c'est noté.</v>
+
+7c1f0d2e-05/11-0
+00:00:21.000 --> 00:00:25.700
+<v Marie Durand>Olivier prépare le planning pour vendredi.</v>
+
+7c1f0d2e-06/8-0
+00:00:26.200 --> 00:00:29.900
+<v Olivier Zimmer>Oui. Il faudra valider l'architecture.</v>
+
+7c1f0d2e-07/10-0
+00:00:30.500 --> 00:00:34.800
+<v Eric Moreau>On a parlé du budget, rien à faire.</v>
+
+7c1f0d2e-08/16-0
+00:00:35.400 --> 00:00:42.100
+<v Olivier Zimmer>On valide le passage sur les nouveaux commutateurs le week-end du 21/11.</v>
+
+7c1f0d2e-09/13-0
+00:00:42.700 --> 00:00:47.300
+<v Olivier Zimmer>Marie réalisera la recette avant le 20/11.</v>
+
+7c1f0d2e-10/18-0
+00:00:48.000 --> 00:00:54.600
+<v Marie Durand>D'accord. Est-ce que la fenêtre de maintenance est confirmée par la production ?</v>
+
+7c1f0d2e-11/12-0
+00:00:55.200 --> 00:00:59.800
+<v Olivier Zimmer>Je relance la production pour la fenêtre de maintenance.</v>
+
+7c1f0d2e-12/15-0
+00:01:00.300 --> 00:01:06.900
+<v Olivier Zimmer>Eric, tu vérifies les sauvegardes du cœur de réseau, c'est urgent.</v>
+
+7c1f0d2e-13/9-0
+00:01:07.500 --> 00:01:11.200
+<v Marie Durand>Qui prévient les utilisateurs du site ?</v>

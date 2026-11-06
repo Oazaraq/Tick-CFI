@@ -1,0 +1,39 @@
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    client_max_body_size 12m;  # fichiers de 10 Mo + enveloppe de l'envoi
+
+    include /etc/nginx/snippets/security-headers.conf;
+
+    # Adresse du backend résolue à la requête (cache 10 s) et non au démarrage : nginx suit le backend
+    # quand il change d'adresse (redéploiement, réveil serverless). NGINX_LOCAL_RESOLVERS vient de
+    # /etc/resolv.conf (fourni par l'image nginx, voir NGINX_ENTRYPOINT_LOCAL_RESOLVERS).
+    resolver ${NGINX_LOCAL_RESOLVERS} valid=10s;
+
+    # Même origine : l'API est relayée, le backend n'est jamais exposé directement.
+    # BACKEND_URL (substitué au démarrage par l'image nginx) : http://backend:8000 en Compose,
+    # http://backend.railway.internal:8000 sur Railway.
+    location /api/ {
+        set $backend "${BACKEND_URL}";
+        proxy_pass $backend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 180s;
+    }
+
+    # Fichiers de l'application nommés par leur contenu : mis en cache un an sans risque
+    location /assets/ {
+        include /etc/nginx/snippets/security-headers.conf;
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
+        try_files $uri =404;
+    }
+
+    # index.html et version.json toujours revalidés : un simple rechargement donne la dernière version
+    location / {
+        include /etc/nginx/snippets/security-headers.conf;
+        add_header Cache-Control "no-cache" always;
+        try_files $uri /index.html;
+    }
+}
