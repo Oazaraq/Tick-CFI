@@ -40,7 +40,7 @@ En-tête : statut, responsable, priorité, boutons Modifier et Supprimer selon v
 - **Général** : informations du projet, charge en j/h, liens (adresses http/https) et **fichiers**.
   - Fichiers acceptés : PDF, Word, Excel, PowerPoint, OpenDocument, images, texte ; 10 Mo au maximum.
   - Ils sont supprimés définitivement 30 jours après le passage en « Livré » ; la date est affichée sur la fiche.
-- **Actions** : création rapide (titre, responsable choisi dans l'équipe du projet, échéance, priorité), changement de statut direct, réalisation interne ou externe (sous-traitant). Un clic sur une action ouvre son volet d'édition. Les échéances dépassées sont en rouge, les échéances proches en orange.
+- **Actions** : création rapide (titre, responsable choisi dans l'équipe du projet, échéance, priorité), changement de statut direct, réalisation interne ou externe (sous-traitant). Un clic sur une action ouvre son volet d'édition. Les échéances dépassées sont en rouge, les échéances proches en orange. La corbeille en bout de ligne supprime l'action après confirmation (Administrateur et Chef de projet) : elle disparaît des listes, l'historique du projet la conserve.
 - **Planning** : phases et jalons, catégories de charge, j/h vendus et consommés, dépendances.
   - Le Gantt trace les dépendances et le remplissage de la consommation (orange en cas de dépassement).
   - **Exporter en .png** produit une image du Gantt.
@@ -55,7 +55,7 @@ En-tête : statut, responsable, priorité, boutons Modifier et Supprimer selon v
 
 ## Mes actions
 
-Vos actions, retards d'abord, puis par échéance et priorité. Le statut se change en un clic. Filtres : statut, priorité, projet ; les actions terminées et annulées sont masquées par défaut.
+Vos actions, retards d'abord, puis par échéance et priorité. Le statut se change en un clic ; la corbeille supprime une action (Administrateur et Chef de projet). Filtres : statut, priorité, projet ; les actions terminées et annulées sont masquées par défaut.
 
 ## Utilisateurs (Administrateur)
 

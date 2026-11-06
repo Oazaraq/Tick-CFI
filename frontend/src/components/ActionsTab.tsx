@@ -6,10 +6,13 @@ import type { Action, ActionStatus, Priority, Project, Sourcing } from '../api/t
 import { useCan, useMe, useTeam } from '../hooks'
 import { t } from '../i18n'
 import { dueClass, fmtDate, fullName } from '../lib/format'
+import DeleteActionButton from './DeleteActionButton'
 import { Button, Empty, ErrorState, Field, inputBase, inputClass, PriorityBadge, Spinner, UserSelect, useToast } from './ui'
 
 export default function ActionsTab({ project }: { project: Project }) {
-  const canWrite = useCan()('action_write')
+  const can = useCan()
+  const canWrite = can('action_write')
+  const canDelete = can('action_delete')
   const soonDays = useMe().data?.due_soon_days ?? 7
   const qc = useQueryClient()
   const toast = useToast()
@@ -37,6 +40,7 @@ export default function ActionsTab({ project }: { project: Project }) {
           <thead>
             <tr className="border-b border-gray-200 text-left text-gray-500">
               {['title', 'assignee', 'sourcing', 'due_date', 'priority', 'status'].map((k) => <th key={k} className="px-3 py-2 font-medium">{t(`field.${k}`)}</th>)}
+              {canDelete && <th className="w-10" aria-label={t('common.delete')} />}
             </tr>
           </thead>
           <tbody>
@@ -53,6 +57,7 @@ export default function ActionsTab({ project }: { project: Project }) {
                     {ACTION_STATUSES.map((s) => <option key={s} value={s}>{t(`action_status.${s}`)}</option>)}
                   </select>
                 </td>
+                {canDelete && <td className="px-2 py-2 text-right"><DeleteActionButton action={a} /></td>}
               </tr>
             ))}
           </tbody>

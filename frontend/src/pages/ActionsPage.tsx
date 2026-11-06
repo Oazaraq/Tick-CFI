@@ -5,6 +5,7 @@ import { api, qs } from '../api/client'
 import { ACTION_STATUSES, isClosed, PRIORITIES } from '../api/types'
 import type { Action, ActionStatus, ProjectCard } from '../api/types'
 import { Button, Empty, ErrorState, inputBase, inputClass, PriorityBadge, Spinner, useToast } from '../components/ui'
+import DeleteActionButton from '../components/DeleteActionButton'
 import { useCan, useMe } from '../hooks'
 import { t } from '../i18n'
 import { dueClass, fmtDate, fullName } from '../lib/format'
@@ -89,6 +90,7 @@ export default function ActionsPage() {
                     {canWrite && !isClosed(a.status) && (
                       <Button variant="ghost" title={t('actions.mark_done')} onClick={() => setStatus.mutate({ id: a.id, status: 'done' })}>✓</Button>
                     )}
+                    <DeleteActionButton action={a} />
                   </div>
                 </td>
               </tr>

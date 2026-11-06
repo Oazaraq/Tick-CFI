@@ -412,5 +412,6 @@
   "meetings.confirm_delete": "Supprimer définitivement cette réunion et sa transcription ?",
   "history.meeting_deleted": "Réunion supprimée : {label}",
   "event.meeting_deleted": "Suppression d'une réunion",
-  "project.team_hint": "Seuls le responsable et les participants voient le projet et peuvent s'y voir confier une action ou un risque."
+  "project.team_hint": "Seuls le responsable et les participants voient le projet et peuvent s'y voir confier une action ou un risque.",
+  "action.confirm_delete_named": "Supprimer l'action « {title} » ? Elle disparaîtra des listes ; l'historique du projet la conservera."
 }
