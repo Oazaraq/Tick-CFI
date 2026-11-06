@@ -25,7 +25,7 @@ cp .env.example .env
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_FIRST_NAME`, `ADMIN_LAST_NAME` | premier administrateur, créé au premier démarrage d'une base vide ; `ADMIN_EMAIL` peut être un simple identifiant (ex. `admin`) ; changez le mot de passe après la première connexion |
 | `INITIAL_USERS` | facultatif : comptes à créer au démarrage, en JSON (`[{"email": …, "first_name": …, "last_name": …, "role": "project_manager"}]`) ; chacun reçoit un lien pour choisir son mot de passe |
 | `APP_BASE_URL` | adresse publique, ex. `https://tickson.mondomaine.local` (liens des emails) |
-| `COOKIE_SECURE` | `true` (application servie en HTTPS) |
+| `COOKIE_SECURE` | `true` (application servie en HTTPS). Le backend refuse alors de démarrer si `SECRET_KEY` ou `ADMIN_PASSWORD` gardent leur valeur d'exemple |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_FROM` | relais interne, ex. `smtp.mondomaine.local`, `25`, `tickson@mondomaine.fr` |
 | `SMTP_SECURITY`, `SMTP_USER`, `SMTP_PASSWORD` | `none` pour un relais par adresse IP ; sinon `starttls` (587) ou `ssl` (465) avec identifiants |
 | `SMTP_TEST_RECIPIENT` | vide en production (sinon tous les emails partent vers cette adresse) |

@@ -48,5 +48,16 @@ class Settings(BaseSettings):
     seed_demo: bool = False
     demo_password: str = "demo1234"
 
+    def unsafe_defaults(self) -> list[str]:
+        """Variables restées à leur valeur de développement (publique dans le dépôt) alors que COOKIE_SECURE=true."""
+        if not self.cookie_secure:
+            return []
+        unsafe = [name for name, value, default in (("SECRET_KEY", self.secret_key, "dev-secret-change-me"),
+                                                    ("ADMIN_PASSWORD", self.admin_password, "admin1234"))
+                  if value == default]
+        if self.seed_demo and self.demo_password == "demo1234":
+            unsafe.append("DEMO_PASSWORD")
+        return unsafe
+
 
 settings = Settings()

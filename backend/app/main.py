@@ -18,6 +18,9 @@ from app.services.errors import ServiceError
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
+    unsafe = settings.unsafe_defaults()
+    if unsafe:  # en production (HTTPS), les valeurs publiques du dépôt ne doivent jamais servir
+        raise RuntimeError("Démarrage refusé : valeurs par défaut à remplacer dans l'environnement : " + ", ".join(unsafe))
     with SessionLocal() as db:
         users_service.ensure_admin(db)
         for user in users_service.bootstrap_users(db):  # INITIAL_USERS : lien d'activation envoyé
