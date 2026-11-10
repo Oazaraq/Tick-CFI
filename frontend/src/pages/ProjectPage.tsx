@@ -55,6 +55,8 @@ export default function ProjectPage() {
         <span className="text-sm text-gray-600">{fullName(p.owner)}</span>
         <PriorityBadge value={p.priority} />
         <div className="ml-auto flex gap-2">
+          <Link to={`/projects/${p.id}/checklist`}
+            className="rounded-lg border border-blue-200 bg-white px-3 py-1.5 text-sm font-medium text-blue-800 hover:bg-blue-50">☑ {t('checklist.button')}</Link>
           {can('project_write') && <Button variant="secondary" onClick={() => setEditing(true)}>{t('common.edit')}</Button>}
           {can('project_delete') && (
             <Button variant="danger" onClick={() => window.confirm(t('project.confirm_delete')) && remove.mutate()}>{t('common.delete')}</Button>

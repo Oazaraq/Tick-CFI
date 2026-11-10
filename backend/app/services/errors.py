@@ -19,3 +19,8 @@ class Invalid(ServiceError):
 
 class ConfirmationRequired(ServiceError):
     status_code = 409
+
+
+class Conflict(ServiceError):
+    """Écriture concurrente : la donnée a changé depuis qu'elle a été lue."""
+    status_code = 409

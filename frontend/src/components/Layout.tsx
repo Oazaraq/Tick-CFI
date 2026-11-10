@@ -36,7 +36,7 @@ export default function Layout() {
   if (!me) return null
   return (
     <div className="min-h-screen">
-      <header className="bg-ocean flex flex-wrap items-center gap-2 px-4 py-2.5 text-white shadow-md">
+      <header className="bg-ocean flex flex-wrap items-center gap-2 px-4 py-2.5 text-white shadow-md print:hidden">
         <Logo className="mr-4" />
         <NavLink to="/dashboard" className={navClass}>{t('nav.dashboard')}</NavLink>
         <NavLink to="/projects" className={navClass}>{t('nav.projects')}</NavLink>

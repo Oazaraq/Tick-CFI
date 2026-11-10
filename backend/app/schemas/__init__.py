@@ -450,3 +450,51 @@ class EmailLogOut(ORM):
     project_id: int | None
     status: Literal["sent", "failed"]
     error: str | None
+
+
+# ---------- Check-list de lancement ----------
+ChecklistStatus = Literal["", "ok", "ko", "tbc", "na"]
+ChecklistOwner = Literal["Avant-vente", "Client", "CFI"]
+
+
+class ChecklistMeta(BaseModel):
+    client: str = Field("", max_length=200)
+    kickoff_date: date | None = None
+    participants: str = Field("", max_length=500)
+    order_ref: str = Field("", max_length=200)
+
+
+class ChecklistState(BaseModel):
+    status: ChecklistStatus = ""
+    note: str = Field("", max_length=2000)
+
+
+class ChecklistCustomItem(BaseModel):
+    id: str = Field(pattern=r"^X-[A-Za-z0-9]{1,16}$")
+    section: str = Field(max_length=10)
+    point: str = Field(min_length=1, max_length=120)
+    question: str = Field("", max_length=500)
+    owner: ChecklistOwner = "CFI"
+    blocking: bool = False
+
+
+class ChecklistCalcRow(BaseModel):
+    name: str = Field("", max_length=120)
+    qty: int = Field(1, ge=0, le=999)
+    watts: float | None = Field(None, ge=0, le=100000)
+    units: float | None = Field(None, ge=0, le=100)
+
+
+class ChecklistIn(BaseModel):
+    revision: int = Field(ge=0)
+    meta: ChecklistMeta = Field(default_factory=ChecklistMeta)
+    states: dict[str, ChecklistState] = Field(default_factory=dict)
+    custom: list[ChecklistCustomItem] = Field(default_factory=list, max_length=50)
+    calc: list[ChecklistCalcRow] = Field(default_factory=list, max_length=50)
+
+
+class ChecklistOut(ChecklistIn):
+    sections: list[dict]
+    updated_at: datetime | None = None
+    updated_by: UserBrief | None = None
+

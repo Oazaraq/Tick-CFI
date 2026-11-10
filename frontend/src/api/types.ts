@@ -185,3 +185,25 @@ export interface EmailLog {
   status: 'sent' | 'failed'
   error: string | null
 }
+
+/* ---------- Check-list de lancement ---------- */
+export type ChecklistStatus = '' | 'ok' | 'ko' | 'tbc' | 'na'
+export type ChecklistOwner = 'Avant-vente' | 'Client' | 'CFI'
+export interface ChecklistItem { id: string; point: string; question: string; owner: ChecklistOwner; blocking: boolean }
+export interface ChecklistCustomItem extends ChecklistItem { section: string }
+export interface ChecklistSection { code: string; title: string; note?: string; calc?: boolean; items: ChecklistItem[] }
+export interface ChecklistCalcRow { name: string; qty: number; watts: number | null; units: number | null }
+export interface ChecklistMeta { client: string; kickoff_date: string | null; participants: string; order_ref: string }
+export interface ChecklistData {
+  revision: number
+  meta: ChecklistMeta
+  states: Record<string, { status: ChecklistStatus; note: string }>
+  custom: ChecklistCustomItem[]
+  calc: ChecklistCalcRow[]
+}
+export interface Checklist extends ChecklistData {
+  sections: ChecklistSection[]
+  updated_at: string | null
+  updated_by: UserBrief | null
+}
+

@@ -14,6 +14,7 @@ const TYPES = [
   'risk_created', 'risk_updated', 'document_added', 'document_removed',
   'comment_added', 'comment_edited', 'comment_deleted', 'meeting_imported', 'actions_created_by_ai',
   'action_overdue', 'meeting_deleted', 'file_added', 'file_deleted', 'files_purged',
+  'checklist_status_changed', 'checklist_note_updated', 'checklist_item_added', 'checklist_item_removed', 'checklist_info_updated',
 ]
 
 /** Une ligne lisible : les valeurs sont figées par le serveur, la formulation vient de fr.json. */

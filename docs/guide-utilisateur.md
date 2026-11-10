@@ -53,6 +53,13 @@ En-tête : statut, responsable, priorité, boutons Modifier et Supprimer selon v
 - **Commentaires** : fil de discussion ; chacun modifie ou supprime ses propres commentaires.
 - **Historique** : journal non modifiable de tout ce qui s'est passé, avec filtres par type, auteur et période.
 
+**Check-list** (bouton en haut de la fiche) : la check-list de lancement du projet, 15 points en 5 groupes (site et baie, énergie, réseau, commande et licences, planning).
+- Pour chaque point : OK, KO, ? (à confirmer) ou N/A, et une note. Un nouveau clic sur le statut actif l'efface.
+- Le bandeau rouge compte les points bloquants non levés ; les filtres « À traiter » et « Bloquants » réduisent la liste.
+- « + Ajouter un point » ajoute un point propre au projet ; le calculateur du groupe Énergie donne la charge ajoutée (W, BTU/h, U).
+- Enregistrement automatique (au clic, ou en quittant un champ texte), tracé dans l'Historique. Si quelqu'un a modifié la check-list entre-temps, elle est rechargée.
+- **Imprimer / PDF** produit une version papier sans les boutons. Administrateur, Chef de projet et Contributeur modifient ; le Lecteur consulte.
+
 ## Mes actions
 
 Vos actions, retards d'abord, puis par échéance et priorité. Le statut se change en un clic ; la corbeille supprime une action (Administrateur et Chef de projet). Filtres : statut, priorité, projet ; les actions terminées et annulées sont masquées par défaut.

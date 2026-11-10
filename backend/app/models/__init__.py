@@ -222,6 +222,20 @@ class ProjectFile(Base):
 
     uploader: Mapped[User | None] = relationship()
 
+class ProjectChecklist(Base):
+    """Check-list de lancement d'un projet : états des points du modèle, points ajoutés, calculateur (JSON).
+    Le modèle lui-même vit dans le code (services/checklists.py) ; `revision` protège des écritures concurrentes."""
+    __tablename__ = "project_checklist"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("project.id"), unique=True)
+    data: Mapped[dict] = mapped_column(JSON, default=dict)
+    revision: Mapped[int] = mapped_column(default=0)
+    updated_by: Mapped[int | None] = mapped_column(ForeignKey("user.id"))
+    updated_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+
+    editor: Mapped[User | None] = relationship()
+
+
 planning_dependency = Table(
     "planning_dependency",
     Base.metadata,

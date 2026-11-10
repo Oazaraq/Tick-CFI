@@ -26,6 +26,7 @@ class Perm(StrEnum):
     COMMENT_WRITE = "comment_write"
     COMMENT_EDIT_OWN = "comment_edit_own"  # resource = le commentaire
     MEETING_MANAGE = "meeting_manage"      # importer, relancer, valider, rejeter
+    CHECKLIST_WRITE = "checklist_write"    # renseigner la check-list de lancement d'un projet
     USER_MANAGE = "user_manage"
     SELF_SETTINGS = "self_settings"        # interrupteur emails, mot de passe
 
@@ -47,6 +48,7 @@ MATRIX: dict[Perm, frozenset[Role]] = {
     Perm.COMMENT_WRITE: _WRITERS,
     Perm.COMMENT_EDIT_OWN: _WRITERS,
     Perm.MEETING_MANAGE: _MANAGERS,
+    Perm.CHECKLIST_WRITE: _WRITERS,
     Perm.USER_MANAGE: frozenset({Role.ADMIN}),
     Perm.SELF_SETTINGS: _ALL,
 }

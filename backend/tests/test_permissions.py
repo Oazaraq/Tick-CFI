@@ -18,6 +18,7 @@ EXPECTED = {
     Perm.EMAIL_LOG_VIEW: {A},
     Perm.COMMENT_WRITE: {A, PM, C},
     Perm.MEETING_MANAGE: {A, PM},
+    Perm.CHECKLIST_WRITE: {A, PM, C},
     Perm.USER_MANAGE: {A},
     Perm.SELF_SETTINGS: {A, PM, C, R},
 }
