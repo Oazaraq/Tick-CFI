@@ -1,4 +1,4 @@
-"""Charge : ingénieurs par demi-journée, gestion de projet à l'heure (1 j = 7,5 h) ; reporting par projet et catégorie."""
+"""Charge : vendue par demi-journée ; consommation de la gestion de projet à l'heure (1 j = 7,5 h) ; reporting."""
 D = "2026-11-12"
 
 
@@ -14,7 +14,8 @@ def test_engineers_by_half_day_project_management_by_hour(make_user, login, new_
     r = _phase(client, p["id"], "Intégration", "infrastructure", 1.3)
     assert r.status_code == 422 and "demi-journées" in r.json()["detail"]
     assert _phase(client, p["id"], "Intégration", "infrastructure", 1.5, 0.5).status_code == 201
-    item = _phase(client, p["id"], "Suivi", "project_management", 1, 0.25 / 7.5).json()  # 15 minutes
+    assert _phase(client, p["id"], "Suivi", "project_management", 0.3).status_code == 422  # vendu : en jours
+    item = _phase(client, p["id"], "Suivi", "project_management", 1, 0.25 / 7.5).json()  # 15 minutes consommées
     assert item["days_consumed"] == 0.0333
     moved = client.patch(f"/api/planning/{item['id']}", json={"category": "infrastructure"})
     assert moved.status_code == 422  # 0,0333 j n'est pas une demi-journée

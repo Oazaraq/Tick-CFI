@@ -47,12 +47,15 @@ def _normalize(item: PlanningItem) -> None:
 
 
 def _check_units(item: PlanningItem) -> None:
-    """Ingénieurs vendus à la journée ou à la demi-journée ; la gestion de projet se saisit à l'heure (1 j = 7,5 h)."""
-    if item.category == labels.HOURLY_CATEGORY:
-        return
-    for value in (item.days_sold, item.days_consumed):
+    """Tout se vend à la journée ou à la demi-journée ; seule la consommation de la gestion de projet se décompte
+    à l'heure (1 j = 7,5 h)."""
+    checked = [("vendue", item.days_sold)]
+    if item.category != labels.HOURLY_CATEGORY:
+        checked.append(("consommée", item.days_consumed))
+    for what, value in checked:
         if value is not None and abs(value * 2 - round(value * 2)) > 1e-6:
-            raise Invalid("Hors gestion de projet, la charge se compte en journées ou demi-journées (multiple de 0,5 j)")
+            raise Invalid(f"La charge {what} se compte en journées ou demi-journées (multiple de 0,5 j) ; seule la "
+                          "consommation de la gestion de projet se saisit à l'heure")
 
 
 def _predecessors(db: Session, item: PlanningItem, ids: list[int]) -> list[PlanningItem]:

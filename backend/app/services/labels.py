@@ -8,7 +8,7 @@ KIND = {"phase": "Phase", "milestone": "Jalon"}
 SOURCING = {"internal": "Interne", "external": "Externe"}
 # Avenant 3 : catégories de charge des projets d'infrastructure (l'ordre est celui des listes)
 HOURS_PER_DAY = 7.5  # une journée de chef de projet
-HOURLY_CATEGORY = "project_management"  # seule catégorie saisie à l'heure ; les ingénieurs se vendent par demi-journée
+HOURLY_CATEGORY = "project_management"  # vendue en jours comme le reste, mais consommation décomptée à l'heure
 
 CATEGORY = {
     "infrastructure": "Ingénierie infrastructure",

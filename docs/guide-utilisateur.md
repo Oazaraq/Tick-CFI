@@ -42,7 +42,7 @@ En-tête : statut, responsable, priorité, boutons Modifier et Supprimer selon v
   - Ils sont supprimés définitivement 30 jours après le passage en « Livré » ; la date est affichée sur la fiche.
 - **Actions** : création rapide (titre, responsable choisi dans l'équipe du projet, échéance, priorité), changement de statut direct, réalisation interne ou externe (sous-traitant). Un clic sur une action ouvre son volet d'édition. Les échéances dépassées sont en rouge, les échéances proches en orange. La corbeille en bout de ligne supprime l'action après confirmation (Administrateur et Chef de projet) : elle disparaît des listes, l'historique du projet la conserve.
 - **Planning** : phases et jalons, catégories de charge, vendu et consommé, dépendances.
-  - Les ingénieurs se comptent en journées ou demi-journées (multiples de 0,5 j). La catégorie **Gestion de projet** se saisit en heures : 1 jour = 7,5 h ; Tick’ convertit et affiche les deux.
+  - Le vendu se saisit en journées ou demi-journées (multiples de 0,5 j), comme le consommé des ingénieurs. Pour la catégorie **Gestion de projet**, le consommé se décompte en heures : 1 jour = 7,5 h ; Tick’ convertit et affiche les deux.
   - Le Gantt trace les dépendances et le remplissage de la consommation (orange en cas de dépassement).
   - **Exporter en .jpg** produit une image du Gantt sur fond blanc, lisible par toutes les visionneuses.
 - **Risques** : probabilité × impact, criticité calculée, mesures, responsable (membre de l'équipe), statut.

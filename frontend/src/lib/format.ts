@@ -25,7 +25,7 @@ export const fmtDateTime = (iso: string) =>
 /** Nombre de jours/homme à la française : 2,5 */
 export const fmtDays = (n: number | null | undefined) => (n ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 2 })
 
-/** Gestion de projet saisie à l'heure (1 j = 7,5 h) ; les ingénieurs se vendent par demi-journée. */
+/** Tout se vend par demi-journée ; la consommation de la gestion de projet se décompte à l'heure (1 j = 7,5 h). */
 export const HOURS_PER_DAY = 7.5
 export const HOURLY_CATEGORY = 'project_management'
 export const toHours = (days: number | null | undefined) => Math.round((days ?? 0) * HOURS_PER_DAY * 100) / 100

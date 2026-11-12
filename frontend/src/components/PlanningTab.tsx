@@ -23,7 +23,7 @@ const convert = (value: string, from: string, to: string) =>
   value === '' || hourly(from) === hourly(to) ? value : String(hourly(to) ? toHours(Number(value)) : toDays(Number(value)))
 
 /** Avenants 1 et 3 : saisie en tableau, Gantt redessiné à chaque changement, charge par catégorie, export .jpg.
- *  Gestion de projet saisie à l'heure (1 j = 7,5 h), ingénierie par demi-journée. */
+ *  Vendu en jours (par demi-journée) ; consommé de la gestion de projet décompté à l'heure (1 j = 7,5 h). */
 export default function PlanningTab({ project }: { project: Project }) {
   const canWrite = useCan()('project_write')
   const categories = useCategories()
@@ -39,7 +39,7 @@ export default function PlanningTab({ project }: { project: Project }) {
       const phase = form.kind === 'phase'
       const body = {
         label: form.label, kind: form.kind, start_date: form.start_date, end_date: phase ? form.end_date || null : form.start_date,
-        category: phase ? form.category || null : null, days_sold: phase ? fromField(form.days_sold, form.category) : null,
+        category: phase ? form.category || null : null, days_sold: phase ? num(form.days_sold) : null,
         days_consumed: phase ? fromField(form.days_consumed, form.category) : null, predecessor_ids: form.predecessor_ids,
       }
       return form.id ? api.patch(`/planning/${form.id}`, body) : api.post(`/projects/${project.id}/planning`, body)
@@ -58,7 +58,7 @@ export default function PlanningTab({ project }: { project: Project }) {
   }
   const edit = (item: PlanningItem) => setForm({
     id: item.id, label: item.label, kind: item.kind, start_date: item.start_date, end_date: item.end_date,
-    category: item.category ?? '', days_sold: toField(item.days_sold, item.category), days_consumed: toField(item.days_consumed, item.category),
+    category: item.category ?? '', days_sold: item.days_sold?.toString() ?? '', days_consumed: toField(item.days_consumed, item.category),
     predecessor_ids: item.predecessor_ids,
   })
   const togglePredecessor = (id: number) => setForm({
@@ -98,7 +98,7 @@ export default function PlanningTab({ project }: { project: Project }) {
                 <td className="px-3 py-2">{categoryLabel(item.category) || '—'}</td>
                 <td className={`px-3 py-2 ${(item.days_consumed ?? 0) > (item.days_sold ?? 0) ? 'font-medium text-prio-high' : ''}`}>
                   {item.days_sold == null && item.days_consumed == null ? '—' : hourly(item.category)
-                    ? `${fmtHours(item.days_consumed)} / ${fmtHours(item.days_sold)}` : `${fmtDays(item.days_consumed)}/${fmtDays(item.days_sold)}`}
+                    ? `${fmtHours(item.days_consumed)} / ${fmtDays(item.days_sold)} j` : `${fmtDays(item.days_consumed)}/${fmtDays(item.days_sold)}`}
                 </td>
                 <td className="px-3 py-2">
                   {item.predecessor_ids.map((pid) => (
@@ -180,16 +180,15 @@ export default function PlanningTab({ project }: { project: Project }) {
                 <div className="w-56">
                   <Field label={t('field.category')}>
                     <select className={inputClass} value={form.category} onChange={(e) => setForm({
-                      ...form, category: e.target.value, days_sold: convert(form.days_sold, form.category, e.target.value),
-                      days_consumed: convert(form.days_consumed, form.category, e.target.value) })}>
+                      ...form, category: e.target.value, days_consumed: convert(form.days_consumed, form.category, e.target.value) })}>
                       <option value="">{t('planning.no_category')}</option>
                       {categories.data?.map((c) => <option key={c.code} value={c.code}>{c.label}</option>)}
                     </select>
                   </Field>
                 </div>
                 <div className="w-28">
-                  <Field label={t(hourly(form.category) ? 'planning.hours_sold' : 'field.days_sold')}>
-                    <input type="number" min={0} step={hourly(form.category) ? 0.25 : 0.5} className={inputClass} value={form.days_sold} onChange={(e) => setForm({ ...form, days_sold: e.target.value })} />
+                  <Field label={t('field.days_sold')}>
+                    <input type="number" min={0} step={0.5} className={inputClass} value={form.days_sold} onChange={(e) => setForm({ ...form, days_sold: e.target.value })} />
                   </Field>
                 </div>
                 <div className="w-28">
