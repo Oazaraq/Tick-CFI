@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router'
 import { api } from '../api/client'
 import type { EffortReportRow } from '../api/types'
 import { ChartCard, EffortBars } from '../components/charts'
+import EffortBreakdown, { rate, rateClass } from '../components/EffortBreakdown'
 import { Button, ErrorState, inputClass, Spinner } from '../components/ui'
 import { t } from '../i18n'
 import { download } from '../lib/exportImage'
@@ -24,8 +25,6 @@ function sum(rows: EffortReportRow[], key: (r: EffortReportRow) => string, label
   return [...totals.values()]
 }
 
-const rate = (sold: number, consumed: number) => (sold ? Math.round((consumed / sold) * 100) : null)
-const rateClass = (r: number | null) => (r == null ? 'text-gray-400' : r > 100 ? 'font-bold text-red-700' : r >= 80 ? 'font-semibold text-amber-700' : 'text-gray-800')
 const num = (n: number) => n.toLocaleString('fr-FR', { maximumFractionDigits: 2, useGrouping: false })
 const cell = (v: string) => (/[;"\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v)
 
@@ -103,28 +102,75 @@ export default function ReportingPage() {
           <p className="text-sm text-gray-600">{t('reporting.subtitle')}</p>
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-2">
-          <select className={`${inputClass} w-auto`} value={status} onChange={(e) => setStatus(e.target.value)} aria-label={t('reporting.status')}>
+          <div className="w-52"><select className={inputClass} value={status} onChange={(e) => setStatus(e.target.value)} aria-label={t('reporting.status')}>
             <option value="">{t('reporting.all_statuses')}</option>
             <option value={NOT_DONE}>{t('reporting.not_delivered')}</option>
             {statuses.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
-          </select>
-          <select className={`${inputClass} w-auto`} value={owner} onChange={(e) => setOwner(e.target.value)} aria-label={t('reporting.owner')}>
+          </select></div>
+          <div className="w-52"><select className={inputClass} value={owner} onChange={(e) => setOwner(e.target.value)} aria-label={t('reporting.owner')}>
             <option value="">{t('reporting.all_owners')}</option>
             {owners.map((o) => <option key={o.key} value={o.key}>{o.label}</option>)}
-          </select>
+          </select></div>
           <Button variant="secondary" disabled={!rows.length} onClick={exportCsv}>{t('reporting.export')}</Button>
         </div>
       </header>
       {!rows.length ? <p className="rounded-xl bg-white p-6 text-center text-sm text-gray-500 shadow-sm">{t('reporting.empty')}</p> : (
         <>
           {table(t('reporting.by_project'), t('reporting.project'), byProject, true)}
-          {table(t('reporting.by_category'), t('reporting.category'), byCategory, false)}
           <ChartCard title={t('reporting.chart')}
             table={{ head: [t('reporting.project'), t('reporting.sold'), t('reporting.consumed')], rows: byProject.map((d) => [d.label, fmtDays(d.sold), fmtDays(d.consumed)]) }}>
             <EffortBars data={byProject} format={fmtDays} onSelect={(d) => navigate(`/projects/${d.key}?tab=planning`)} />
           </ChartCard>
+          <section className="rounded-xl bg-white p-4 shadow-sm">
+            <h2 className="mb-2 font-bold text-blue-900">{t('reporting.by_category_macro')}</h2>
+            <EffortBreakdown lines={byCategory} />
+          </section>
+          <Matrix rows={rows} />
         </>
       )}
     </div>
   )
 }
+
+/** Ventilation croisée : une ligne par projet, une colonne par catégorie ; consommé / vendu, en jours. */
+function Matrix({ rows }: { rows: EffortReportRow[] }) {
+  const categories = sum(rows, (r) => r.category ?? '', (r) => r.category_label).sort((a, b) => a.label.localeCompare(b.label, 'fr'))
+  const projects = sum(rows, (r) => String(r.project_id), (r) => r.title)
+  const cells = new Map(rows.map((r) => [`${r.project_id}|${r.category ?? ''}`, r]))
+  const total = projects.reduce((s, p) => ({ sold: s.sold + p.sold, consumed: s.consumed + p.consumed }), { sold: 0, consumed: 0 })
+  const value = (v?: { sold: number; consumed: number }, strong = false) => v
+    ? <span className={`${v.consumed > v.sold ? 'font-semibold text-red-700' : ''} ${strong ? 'font-semibold' : ''}`}>{fmtDays(v.consumed)} / {fmtDays(v.sold)}</span>
+    : <span className="text-gray-300">—</span>
+  return (
+    <section className="rounded-xl bg-white p-4 shadow-sm">
+      <h2 className="font-bold text-blue-900">{t('reporting.matrix')}</h2>
+      <p className="mb-2 text-xs text-gray-500">{t('reporting.matrix_hint')}</p>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-200 align-bottom text-gray-500">
+              <th className="py-1.5 pr-3 text-left font-medium">{t('reporting.project')}</th>
+              {categories.map((c) => <th key={c.key} className="px-2 py-1.5 text-right font-medium">{c.label}</th>)}
+              <th className="py-1.5 pl-2 text-right font-medium">{t('reporting.total')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {projects.map((p) => (
+              <tr key={p.key} className="border-b border-gray-100">
+                <td className="py-1.5 pr-3"><Link to={`/projects/${p.key}?tab=planning`} className="font-medium text-blue-700 hover:underline">{p.label}</Link></td>
+                {categories.map((c) => <td key={c.key} className="whitespace-nowrap px-2 py-1.5 text-right tabular-nums">{value(cells.get(`${p.key}|${c.key}`))}</td>)}
+                <td className="whitespace-nowrap py-1.5 pl-2 text-right tabular-nums">{value(p, true)}</td>
+              </tr>
+            ))}
+            <tr className="font-semibold">
+              <td className="py-1.5 pr-3">{t('reporting.total')}</td>
+              {categories.map((c) => <td key={c.key} className="whitespace-nowrap px-2 py-1.5 text-right tabular-nums">{value(c, true)}</td>)}
+              <td className="whitespace-nowrap py-1.5 pl-2 text-right tabular-nums">{value(total, true)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  )
+}
+

@@ -3,9 +3,10 @@ import type { ReactNode } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '../api/client'
-import type { DocLink, Project } from '../api/types'
+import type { DocLink, Effort, Project } from '../api/types'
 import ActionsTab from '../components/ActionsTab'
 import CommentsTab from '../components/CommentsTab'
+import EffortBreakdown from '../components/EffortBreakdown'
 import FilesSection from '../components/FilesSection'
 import HistoryTab from '../components/HistoryTab'
 import MeetingsTab from '../components/MeetingsTab'
@@ -85,6 +86,7 @@ export default function ProjectPage() {
 }
 
 function GeneralTab({ p }: { p: Project }) {
+  const effort = useQuery({ queryKey: ['planning', p.id, 'effort'], queryFn: () => api.get<Effort>(`/projects/${p.id}/effort`) })
   const rows: [string, ReactNode][] = [
     ['field.description', p.description ? <p className="whitespace-pre-wrap">{p.description}</p> : '—'],
     ['field.owner', fullName(p.owner)],
@@ -112,6 +114,12 @@ function GeneralTab({ p }: { p: Project }) {
           </Fragment>
         ))}
       </dl>
+      {effort.data && effort.data.categories.length > 0 && (
+        <section className="rounded-xl bg-white p-4 shadow-sm">
+          <h2 className="mb-2 font-bold text-blue-900">{t('project.effort_breakdown')}</h2>
+          <EffortBreakdown lines={effort.data.categories.map((c) => ({ key: c.code, label: c.label, sold: c.sold, consumed: c.consumed }))} />
+        </section>
+      )}
       <Links projectId={p.id} />
       <FilesSection projectId={p.id} />
     </div>

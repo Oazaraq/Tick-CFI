@@ -37,7 +37,7 @@ Une section par écran. Les boutons affichés dépendent de votre rôle : **Admi
 
 En-tête : statut, responsable, priorité, boutons Modifier et Supprimer selon vos droits. **Modifier** gère aussi les participants ; une personne qui porte encore une action ou un risque ouverts ne peut être retirée qu'après leur réaffectation. Les onglets :
 
-- **Général** : informations du projet, charge en j/h, liens (adresses http/https) et **fichiers**.
+- **Général** : informations du projet, charge en j/h et sa **consommation par catégorie** (tableau avec reste et taux, barres vendu/consommé), liens (adresses http/https) et **fichiers**.
   - Fichiers acceptés : PDF, Word, Excel, PowerPoint, OpenDocument, images, texte ; 10 Mo au maximum.
   - Ils sont supprimés définitivement 30 jours après le passage en « Livré » ; la date est affichée sur la fiche.
 - **Actions** : création rapide (titre, responsable choisi dans l'équipe du projet, échéance, priorité), changement de statut direct, réalisation interne ou externe (sous-traitant). Un clic sur une action ouvre son volet d'édition. Les échéances dépassées sont en rouge, les échéances proches en orange. La corbeille en bout de ligne supprime l'action après confirmation (Administrateur et Chef de projet) : elle disparaît des listes, l'historique du projet la conserve.
@@ -64,7 +64,7 @@ En-tête : statut, responsable, priorité, boutons Modifier et Supprimer selon v
 ## Reporting
 
 Jours vendus et consommés sur les phases du planning de vos projets (tous les projets pour l'administrateur) :
-- **Par projet** et **par catégorie**, avec le reste et le taux de consommation (orange à partir de 80 %, rouge au-delà de 100 %) ; la gestion de projet est aussi donnée en heures.
+- **Par projet** (tableau et barres), **par catégorie tous projets confondus** (tableau et barres) et **ventilation croisée projet × catégorie** (consommé / vendu, en rouge en cas de dépassement), avec le reste et le taux de consommation (orange à partir de 80 %, rouge au-delà de 100 %) ; la gestion de projet est aussi donnée en heures.
 - Filtres par statut (dont « Projets non livrés ») et par responsable ; un clic sur un projet ouvre son planning.
 - **Exporter (CSV)** produit le détail projet par catégorie, prêt pour Excel (séparateur point-virgule, décimales à la virgule).
 

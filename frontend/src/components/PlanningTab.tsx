@@ -6,6 +6,7 @@ import { useCan, useCategories } from '../hooks'
 import { t } from '../i18n'
 import { exportJpeg, slug } from '../lib/exportImage'
 import { fmtDate, fmtDays, fmtHours, HOURLY_CATEGORY, toDays, toHours, todayParis } from '../lib/format'
+import EffortBreakdown from './EffortBreakdown'
 import Gantt from './Gantt'
 import { Button, Empty, ErrorState, Field, inputClass, Spinner, useToast } from './ui'
 
@@ -124,29 +125,7 @@ export default function PlanningTab({ project }: { project: Project }) {
       {effort.data && effort.data.categories.length > 0 && (
         <section className="rounded-xl bg-white p-4 text-sm shadow-sm">
           <h2 className="mb-2 font-bold text-blue-900">{t('planning.effort_title')}</h2>
-          <table className="w-full max-w-xl">
-            <thead>
-              <tr className="text-left text-gray-500">
-                <th className="py-1 font-medium">{t('planning.col.category')}</th>
-                <th className="py-1 text-right font-medium">{t('field.days_sold')}</th>
-                <th className="py-1 text-right font-medium">{t('field.days_consumed')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {effort.data.categories.map((c) => (
-                <tr key={c.code} className={c.consumed > c.sold ? 'text-prio-high' : ''}>
-                  <td className="py-1">{c.label}</td>
-                  <td className="py-1 text-right">{fmtDays(c.sold)}{hourly(c.code) && <span className="text-gray-500"> ({fmtHours(c.sold)})</span>}</td>
-                  <td className="py-1 text-right">{fmtDays(c.consumed)}{hourly(c.code) && <span className="text-gray-500"> ({fmtHours(c.consumed)})</span>}</td>
-                </tr>
-              ))}
-              <tr className="border-t border-gray-200 font-semibold">
-                <td className="py-1">{t('planning.total')}</td>
-                <td className="py-1 text-right">{fmtDays(effort.data.sold)}</td>
-                <td className="py-1 text-right">{fmtDays(effort.data.consumed)}</td>
-              </tr>
-            </tbody>
-          </table>
+          <EffortBreakdown chart={false} lines={effort.data.categories.map((c) => ({ key: c.code, label: c.label, sold: c.sold, consumed: c.consumed }))} />
         </section>
       )}
       {canWrite && (

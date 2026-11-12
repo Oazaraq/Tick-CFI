@@ -478,5 +478,9 @@
   "reporting.total": "Total",
   "reporting.export": "Exporter (CSV)",
   "reporting.empty": "Aucune charge saisie sur les projets affichés.",
-  "reporting.chart": "Vendu et consommé par projet"
+  "reporting.chart": "Vendu et consommé par projet",
+  "project.effort_breakdown": "Consommation par catégorie",
+  "reporting.by_category_macro": "Ventilation par catégorie, tous projets affichés",
+  "reporting.matrix": "Ventilation par projet et par catégorie",
+  "reporting.matrix_hint": "Consommé / vendu, en jours ; en rouge, un consommé supérieur au vendu. Un clic sur un projet ouvre son planning."
 }
