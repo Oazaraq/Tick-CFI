@@ -9,6 +9,7 @@ from app.permissions import Forbidden
 from app.security import COOKIE
 from app.jobs import scheduler
 from app.routers import (actions, auth, checklists, comments, dashboard, emails, files, health, links, meetings, planning,
+                         reporting,
                          projects, risks, statuses, users)
 from app.services import meetings as meetings_service
 from app.services import notifications
@@ -37,7 +38,7 @@ async def lifespan(_app: FastAPI):
 app = FastAPI(title="Tick’", docs_url="/api/docs", openapi_url="/api/openapi.json", redoc_url=None, lifespan=lifespan)
 
 for module in (health, auth, users, statuses, projects, actions, dashboard, risks, comments, links, planning, meetings,
-               files, emails, checklists):
+               files, emails, checklists, reporting):
     app.include_router(module.router, prefix="/api")
 
 

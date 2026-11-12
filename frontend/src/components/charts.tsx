@@ -132,61 +132,6 @@ export function EffortBars({ data, format, onSelect }: { data: EffortDatum[]; fo
   )
 }
 
-function niceMax(value: number): number {
-  const step = 10 ** Math.floor(Math.log10(value))
-  return [1, 2, 2.5, 5, 10].map((k) => k * step).find((v) => v >= value * 1.05) ?? 10 * step
-}
-
-/** Nuage de points : vendus (x) et consommés (y) ; au-dessus de la diagonale, le projet consomme plus que vendu. */
-export function EffortScatter({ data, format, onSelect }: { data: EffortDatum[]; format: (n: number) => string; onSelect?: (d: EffortDatum) => void }) {
-  const tip = useTip()
-  if (!data.length) return <Empty />
-  const W = 520, H = 280, m = { l: 40, r: 16, t: 12, b: 40 }
-  const max = niceMax(Math.max(1, ...data.flatMap((d) => [d.sold, d.consumed])))
-  const x = (v: number) => m.l + (v / max) * (W - m.l - m.r)
-  const y = (v: number) => H - m.b - (v / max) * (H - m.t - m.b)
-  const ticks = [0, 0.25, 0.5, 0.75, 1].map((k) => k * max)
-  const tick = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(1).replace('.', ','))
-  return (
-    <div data-chart className="relative">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={t('charts.effort_title')}>
-        {ticks.map((v) => (
-          <g key={v} className="text-[11px]" fill="var(--viz-text-muted)">
-            <line x1={m.l} x2={W - m.r} y1={y(v)} y2={y(v)} stroke="var(--viz-grid)" strokeWidth={1} />
-            <line x1={x(v)} x2={x(v)} y1={m.t} y2={H - m.b} stroke="var(--viz-grid)" strokeWidth={1} />
-            <text x={m.l - 6} y={y(v) + 4} textAnchor="end">{tick(v)}</text>
-            <text x={x(v)} y={H - m.b + 16} textAnchor="middle">{tick(v)}</text>
-          </g>
-        ))}
-        <line x1={x(0)} y1={y(0)} x2={x(max)} y2={y(max)} stroke="var(--viz-axis)" strokeWidth={1} />
-        <text x={x(max) - 2} y={y(max) + 68} textAnchor="end" className="text-[11px]" fill="var(--viz-text-muted)">{t('charts.diagonal')}</text>
-        <text x={(m.l + W - m.r) / 2} y={H - 6} textAnchor="middle" className="text-[11px]" fill="var(--viz-text-muted)">{t('charts.sold')}</text>
-        <text x={12} y={(m.t + H - m.b) / 2} textAnchor="middle" transform={`rotate(-90 12 ${(m.t + H - m.b) / 2})`} className="text-[11px]" fill="var(--viz-text-muted)">{t('charts.consumed')}</text>
-        {data.map((d) => {
-          const over = d.consumed > d.sold
-          const ratio = d.sold ? ` · ${Math.round((d.consumed / d.sold) * 100)} %` : ''
-          return (
-            <g key={d.key} tabIndex={0} role="button" aria-label={`${d.label} : ${format(d.sold)} / ${format(d.consumed)}`}
-              className="cursor-pointer outline-none [&:focus-visible>circle:last-of-type]:stroke-blue-600"
-              onClick={() => onSelect?.(d)} onKeyDown={(e) => e.key === 'Enter' && onSelect?.(d)}
-              {...tip.bind(d.label, `${format(d.sold)} → ${format(d.consumed)}${ratio}`)}>
-              <circle cx={x(d.sold)} cy={y(d.consumed)} r={12} fill="transparent" />
-              <circle cx={x(d.sold)} cy={y(d.consumed)} r={5} fill="var(--viz-1)" stroke="var(--viz-surface)" strokeWidth={2} />
-              {over && (
-                <text x={x(d.sold) + 9} y={y(d.consumed) - 8} className="text-[11px]" fill="var(--viz-text)">
-                  {d.label.length > 22 ? `${d.label.slice(0, 21)}…` : d.label}
-                </text>
-              )}
-            </g>
-          )
-        })}
-      </svg>
-      <p className="text-xs text-gray-500">{t('charts.scatter_hint')}</p>
-      {tip.node}
-    </div>
-  )
-}
-
 /** Carte de graphique : titre, choix de la vue, données en tableau (accessibilité, valeurs sans survol). */
 export function ChartCard<V extends string>({ title, views, view, onView, table, children }: {
   title: string

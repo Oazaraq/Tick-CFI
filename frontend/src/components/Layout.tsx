@@ -41,6 +41,7 @@ export default function Layout() {
         <NavLink to="/dashboard" className={navClass}>{t('nav.dashboard')}</NavLink>
         <NavLink to="/projects" className={navClass}>{t('nav.projects')}</NavLink>
         <NavLink to="/actions" className={navClass}>{t('nav.my_actions')}</NavLink>
+        <NavLink to="/reporting" className={navClass}>{t('nav.reporting')}</NavLink>
         {me.permissions.includes('user_manage') && <NavLink to="/users" className={navClass}>{t('nav.users')}</NavLink>}
         {me.permissions.includes('email_log_view') && <NavLink to="/emails" className={navClass}>{t('nav.emails')}</NavLink>}
         <div className="relative ml-auto" onMouseLeave={() => setMenu(false)}>

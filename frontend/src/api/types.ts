@@ -207,3 +207,16 @@ export interface Checklist extends ChecklistData {
   updated_by: UserBrief | null
 }
 
+/** Reporting de charge : une ligne par projet et catégorie (jours ; gestion de projet : 1 j = 7,5 h). */
+export interface EffortReportRow {
+  project_id: number
+  title: string
+  status_code: string
+  status_label: string
+  owner: UserBrief
+  category: string | null
+  category_label: string
+  sold: number
+  consumed: number
+}
+

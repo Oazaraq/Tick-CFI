@@ -41,6 +41,18 @@ def _normalize(item: PlanningItem) -> None:
         raise Invalid("La fin doit être postérieure ou égale au début")
     if item.category is not None and item.category not in labels.CATEGORY:
         raise Invalid("Catégorie de charge inconnue")
+    for field in ("days_sold", "days_consumed"):  # heures converties en jours : 4 décimales suffisent
+        if getattr(item, field) is not None:
+            setattr(item, field, round(getattr(item, field), 4))
+
+
+def _check_units(item: PlanningItem) -> None:
+    """Ingénieurs vendus à la journée ou à la demi-journée ; la gestion de projet se saisit à l'heure (1 j = 7,5 h)."""
+    if item.category == labels.HOURLY_CATEGORY:
+        return
+    for value in (item.days_sold, item.days_consumed):
+        if value is not None and abs(value * 2 - round(value * 2)) > 1e-6:
+            raise Invalid("Hors gestion de projet, la charge se compte en journées ou demi-journées (multiple de 0,5 j)")
 
 
 def _predecessors(db: Session, item: PlanningItem, ids: list[int]) -> list[PlanningItem]:
@@ -79,6 +91,7 @@ def create_item(db: Session, actor: User, project: Project, data) -> PlanningIte
                         end_date=data.end_date or data.start_date, position=count, category=data.category or None,
                         days_sold=data.days_sold, days_consumed=data.days_consumed)
     _normalize(item)
+    _check_units(item)
     item.predecessors = _predecessors(db, item, data.predecessor_ids)
     db.add(item)
     db.flush()
@@ -92,6 +105,8 @@ def update_item(db: Session, actor: User, item: PlanningItem, data) -> PlanningI
     fields = FIELDS if kind == "phase" else ("label", "kind", "start_date")  # un jalon : une seule date, aucune charge
     changes = apply_changes(item, data, fields, required=("label", "kind", "start_date", "end_date"))
     _normalize(item)
+    if {"category", "days_sold", "days_consumed"} & data.model_fields_set:  # une saisie ancienne reste modifiable
+        _check_units(item)
     if data.predecessor_ids is not None and "predecessor_ids" in data.model_fields_set:
         new = _predecessors(db, item, data.predecessor_ids)
         if {p.id for p in new} != {p.id for p in item.predecessors}:

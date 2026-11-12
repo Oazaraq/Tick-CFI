@@ -498,3 +498,15 @@ class ChecklistOut(ChecklistIn):
     updated_at: datetime | None = None
     updated_by: UserBrief | None = None
 
+
+class EffortReportRow(BaseModel):
+    project_id: int
+    title: str
+    status_code: str
+    status_label: str
+    owner: UserBrief
+    category: str | None
+    category_label: str
+    sold: float
+    consumed: float
+

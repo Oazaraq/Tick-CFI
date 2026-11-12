@@ -20,7 +20,7 @@ Une section par écran. Les boutons affichés dépendent de votre rôle : **Admi
   - Projets par statut, en barres ou en répartition.
   - Actions ouvertes par priorité.
   - Actions en retard par projet : un clic ouvre le projet.
-  - Charge des projets non livrés : j/h vendus et consommés, en nuage de points ou en barres. Un point au-dessus de la diagonale signale un projet qui a consommé plus que vendu.
+  - Charge des projets non livrés : j/h vendus et consommés, en barres ; un clic ouvre le projet.
 - **Zones d'alerte** : échéances proches, projets bloqués, actions sans responsable, responsable inactif. On peut réaffecter directement depuis la zone.
 - **Tous / Mes projets** (administrateur) limite l'ensemble à vos projets (responsable ou participant).
 
@@ -41,9 +41,10 @@ En-tête : statut, responsable, priorité, boutons Modifier et Supprimer selon v
   - Fichiers acceptés : PDF, Word, Excel, PowerPoint, OpenDocument, images, texte ; 10 Mo au maximum.
   - Ils sont supprimés définitivement 30 jours après le passage en « Livré » ; la date est affichée sur la fiche.
 - **Actions** : création rapide (titre, responsable choisi dans l'équipe du projet, échéance, priorité), changement de statut direct, réalisation interne ou externe (sous-traitant). Un clic sur une action ouvre son volet d'édition. Les échéances dépassées sont en rouge, les échéances proches en orange. La corbeille en bout de ligne supprime l'action après confirmation (Administrateur et Chef de projet) : elle disparaît des listes, l'historique du projet la conserve.
-- **Planning** : phases et jalons, catégories de charge, j/h vendus et consommés, dépendances.
+- **Planning** : phases et jalons, catégories de charge, vendu et consommé, dépendances.
+  - Les ingénieurs se comptent en journées ou demi-journées (multiples de 0,5 j). La catégorie **Gestion de projet** se saisit en heures : 1 jour = 7,5 h ; Tick’ convertit et affiche les deux.
   - Le Gantt trace les dépendances et le remplissage de la consommation (orange en cas de dépassement).
-  - **Exporter en .png** produit une image du Gantt.
+  - **Exporter en .jpg** produit une image du Gantt sur fond blanc, lisible par toutes les visionneuses.
 - **Risques** : probabilité × impact, criticité calculée, mesures, responsable (membre de l'équipe), statut.
 - **Réunions** :
   - **Nouvelle réunion (IA)** : collez la transcription ou déposez le fichier .txt / .vtt exporté de Teams (« Charger la transcription de démonstration » pour essayer), puis **Analyser**.
@@ -59,6 +60,13 @@ En-tête : statut, responsable, priorité, boutons Modifier et Supprimer selon v
 - « + Ajouter un point » ajoute un point propre au projet ; le calculateur du groupe Énergie donne la charge ajoutée (W, BTU/h, U).
 - Enregistrement automatique (au clic, ou en quittant un champ texte), tracé dans l'Historique. Si quelqu'un a modifié la check-list entre-temps, elle est rechargée.
 - **Imprimer / PDF** produit une version papier sans les boutons. Administrateur, Chef de projet et Contributeur modifient ; le Lecteur consulte.
+
+## Reporting
+
+Jours vendus et consommés sur les phases du planning de vos projets (tous les projets pour l'administrateur) :
+- **Par projet** et **par catégorie**, avec le reste et le taux de consommation (orange à partir de 80 %, rouge au-delà de 100 %) ; la gestion de projet est aussi donnée en heures.
+- Filtres par statut (dont « Projets non livrés ») et par responsable ; un clic sur un projet ouvre son planning.
+- **Exporter (CSV)** produit le détail projet par catégorie, prêt pour Excel (séparateur point-virgule, décimales à la virgule).
 
 ## Mes actions
 

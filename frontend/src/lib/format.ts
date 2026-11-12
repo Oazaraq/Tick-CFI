@@ -23,7 +23,14 @@ export const fmtDateTime = (iso: string) =>
   }).format(new Date(iso)).replace(',', '')
 
 /** Nombre de jours/homme à la française : 2,5 */
-export const fmtDays = (n: number | null | undefined) => (n ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 1 })
+export const fmtDays = (n: number | null | undefined) => (n ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 2 })
+
+/** Gestion de projet saisie à l'heure (1 j = 7,5 h) ; les ingénieurs se vendent par demi-journée. */
+export const HOURS_PER_DAY = 7.5
+export const HOURLY_CATEGORY = 'project_management'
+export const toHours = (days: number | null | undefined) => Math.round((days ?? 0) * HOURS_PER_DAY * 100) / 100
+export const toDays = (hours: number) => Math.round((hours / HOURS_PER_DAY) * 10000) / 10000
+export const fmtHours = (days: number | null | undefined) => `${toHours(days).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} h`
 
 export const daysSince =(iso: string) => Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000))
 

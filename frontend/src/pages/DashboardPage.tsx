@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, qs } from '../api/client'
 import type { Action, Dashboard, DashboardCharts, TileKey, Zone } from '../api/types'
-import { ChartCard, EffortBars, EffortScatter, HBars, Shares } from '../components/charts'
+import { ChartCard, EffortBars, HBars, Shares } from '../components/charts'
 import { Chip, ErrorState, inputBase, inputClass, Spinner, UserSelect, useToast } from '../components/ui'
 import { useMe, useUsers } from '../hooks'
 import { t } from '../i18n'
@@ -96,7 +96,6 @@ const days = (n: number) => `${fmtDays(n)} j`
 function Charts({ c }: { c: DashboardCharts }) {
   const navigate = useNavigate()
   const [statusView, setStatusView] = useState<'bars' | 'shares'>('bars')
-  const [effortView, setEffortView] = useState<'scatter' | 'bars'>('scatter')
   const statuses = c.projects_by_status.map((s) => ({ key: s.code, label: s.label ?? s.code, value: s.count }))
   const priorities = c.actions_by_priority.map((p) => ({ key: p.code, label: t(`priority.${p.code}`), value: p.count }))
   const overdue = c.overdue_by_project.map((p) => ({ key: String(p.project_id), label: p.title, value: p.count }))
@@ -116,12 +115,9 @@ function Charts({ c }: { c: DashboardCharts }) {
       <ChartCard title={t('charts.overdue_title')} table={counts(t('charts.project'), overdue)}>
         <HBars data={overdue} onSelect={open} />
       </ChartCard>
-      <ChartCard title={t('charts.effort_title')} views={[['scatter', t('charts.view_scatter')], ['bars', t('charts.view_bars')]]}
-        view={effortView} onView={setEffortView}
+      <ChartCard title={t('charts.effort_title')}
         table={{ head: [t('charts.project'), t('charts.sold'), t('charts.consumed')], rows: effort.map((d) => [d.label, days(d.sold), days(d.consumed)]) }}>
-        {effortView === 'scatter'
-          ? <EffortScatter data={effort} format={days} onSelect={open} />
-          : <EffortBars data={effort} format={days} onSelect={open} />}
+        <EffortBars data={effort} format={days} onSelect={open} />
       </ChartCard>
     </div>
   )

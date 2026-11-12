@@ -8,6 +8,7 @@ import EmailsPage from './pages/EmailsPage'
 import LoginPage from './pages/LoginPage'
 import ProjectPage from './pages/ProjectPage'
 import ChecklistPage from './pages/ChecklistPage'
+import ReportingPage from './pages/ReportingPage'
 import ProjectsPage from './pages/ProjectsPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import UsersPage from './pages/UsersPage'
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="projects/:id" element={<ProjectPage />} />
         <Route path="projects/:id/checklist" element={<ChecklistPage />} />
+        <Route path="reporting" element={<ReportingPage />} />
         <Route path="actions" element={<ActionsPage />} />
         {me.permissions.includes('user_manage') && <Route path="users" element={<UsersPage />} />}
         {me.permissions.includes('email_log_view') && <Route path="emails" element={<EmailsPage />} />}
